@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#eaf1f4">
+<meta name="description" content="Результаты опроса 280 учителей о нейросетях в работе, 13–15 ноября 2026 года.">
+<title>Нейросети в работе учителя — результаты опроса</title>
+<style>
+:root {
+  color-scheme: light;
+  --paper: #fbfcfd;
+  --white: #fff;
+  --ink: #192d3d;
+  --muted: #4b6171;
+  --line: #ccd7dd;
+  --green: #216755;
+  --plum: #695181;
+  --track: #e9eff2;
+  --focus: #165caa;
+  --sans: 'Atkinson Hyperlegible Next', 'Inter', system-ui, sans-serif;
+  --chart-columns: minmax(11rem, .95fr) minmax(8rem, 1.4fr) 4.2rem;
+  --chart-gap: .8rem;
+  --toolbar-offset: 4.5rem;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: var(--toolbar-offset); }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.52 var(--sans); }
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-underline-offset: .22em; }
+button { font: inherit; }
+:where(a, button, summary):focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+section, main { scroll-margin-top: .65rem; }
+.wrap { width: min(1160px, calc(100% - 64px)); margin-inline: auto; }
+.sr-only, .skip:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip:focus { position: fixed; inset: .65rem auto auto .65rem; z-index: 5; padding: .65rem 1rem; background: var(--white); }
+
+.mast { background: #eaf1f4; border-top: 6px solid var(--green); }
+.mast .wrap { padding-block: clamp(18px, 3vw, 36px); }
+.topline { display: flex; flex-wrap: wrap; gap: .2rem 1.2rem; color: var(--muted); font-size: .9rem; }
+.topline strong { color: var(--ink); }
+h1 { max-width: 25ch; margin-top: .34rem; font-size: clamp(1.95rem, 5.2vw, 3.9rem); line-height: 1.04; font-weight: 760; letter-spacing: -.055em; text-wrap: balance; }
+
+.toolbar { position: sticky; top: 0; z-index: 2; background: var(--white); border-bottom: 1px solid var(--line); }
+.toolbar .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .35rem .65rem; padding-block: .3rem; }
+.quick { display: flex; gap: .25rem 1.1rem; align-items: center; }
+.quick a { display: inline-flex; align-items: center; min-height: 44px; font-size: .88rem; font-weight: 700; text-decoration: none; }
+.quick a:hover, .toc a:hover { color: var(--green); text-decoration: underline; }
+.switch { display: inline-flex; gap: 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); padding: 2px; }
+.switch button { min-height: 44px; border: 0; border-radius: 4px; padding: .28rem .7rem; background: transparent; color: var(--muted); cursor: pointer; font-size: .84rem; font-weight: 700; white-space: nowrap; }
+.switch button:hover { background: var(--track); color: var(--ink); }
+.switch button[aria-pressed=true] { background: var(--ink); color: var(--white); }
+
+main { padding-block: clamp(20px, 3.4vw, 44px) 58px; }
+.overview { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: clamp(26px, 5vw, 72px); align-items: start; }
+.toc { position: sticky; top: var(--toolbar-offset); border-top: 2px solid var(--green); padding-top: .65rem; }
+.toc details { margin: 0; padding: 0; border: 0; }
+.toc summary { display: none; }
+.toc strong { font-size: .9rem; }
+.toc ul { margin: .35rem 0 0; padding: 0; list-style: none; }
+.toc a { display: block; padding: .28rem 0; color: var(--muted); font-size: .86rem; text-decoration: none; }
+.panel { min-width: 0; padding-block: 1.7rem; border-top: 1px solid var(--line); }
+.sections .panel:first-child { padding-top: 0; border-top: 0; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.3rem); line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
+h3 { font-size: clamp(1.14rem, 2vw, 1.48rem); line-height: 1.24; letter-spacing: -.023em; text-wrap: balance; }
+.insight, .meta { color: var(--muted); }
+.insight { margin-top: .38rem; }
+.panel [data-chart], #opportunity, #groups { margin-top: .9rem; }
+.meta { margin-top: .7rem; font-size: .84rem; }
+
+.chart, .pairs { display: grid; gap: .43rem; margin: 0; padding: 0; list-style: none; }
+.row, .axis { display: grid; grid-template-columns: var(--chart-columns); gap: var(--chart-gap); align-items: center; min-width: 0; }
+.axis { margin-bottom: .38rem; }
+.axis span { grid-column: 2; font-size: .73rem; color: var(--muted); }
+.axis .ticks { display: flex; justify-content: space-between; gap: .25rem; font-variant-numeric: tabular-nums; }
+.axis .ticks span:last-child { text-align: right; white-space: nowrap; }
+.label, .series-label { min-width: 0; overflow-wrap: anywhere; }
+.label { font-size: .93rem; line-height: 1.42; }
+.track { display: block; height: 9px; border-radius: 2px; background: var(--track); overflow: hidden; }
+.fill { display: block; width: var(--fill); height: 100%; background: var(--green); border-radius: 2px; }
+.plum .fill { background: var(--plum); }
+.number { font-size: .89rem; font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; white-space: nowrap; }
+
+[data-chart] details { margin-top: .55rem; }
+summary { cursor: pointer; color: var(--green); font-size: .88rem; font-weight: 700; }
+[data-chart] summary, .toc summary { align-content: center; min-height: 44px; width: fit-content; }
+summary:hover { text-decoration: underline; }
+[data-chart] details .chart { margin-bottom: .45rem; }
+.callout { margin-top: .9rem; border-left: 3px solid var(--green); padding: .5rem .75rem; background: #eaf2ee; font-size: .91rem; }
+
+.synthesis { margin-top: 1.4rem; }
+.synthesis > h2 { border-top: 2px solid var(--green); padding-top: 1.3rem; margin-bottom: .45rem; }
+.synthesis .panel { border-top: 0; }
+.synthesis .panel + .panel { border-top: 1px solid var(--line); }
+.pairs { gap: .6rem; }
+.pair { border-top: 1px solid var(--line); padding-top: .55rem; }
+.pair > .label { display: block; margin-bottom: .28rem; font-weight: 700; }
+.pairline { display: grid; grid-template-columns: var(--chart-columns); gap: var(--chart-gap); align-items: center; }
+.pairline + .pairline { margin-top: .18rem; }
+.series-label { color: var(--muted); font-size: .84rem; line-height: 1.4; }
+.section-controls { margin-top: .8rem; }
+.group-bases { margin-top: .6rem; color: var(--muted); font-size: .84rem; }
+
+footer { border-top: 1px solid var(--line); padding-block: 1.2rem 2rem; color: var(--muted); font-size: .86rem; }
+footer p + p { margin-top: .35rem; }
+
+@media (max-width: 820px) {
+  .wrap { width: calc(100% - 36px); }
+  .overview { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .toc { position: static; padding: 0; border-top: 0; border-bottom: 1px solid var(--line); }
+  .toc strong { display: none; }
+  .toc summary { display: list-item; }
+  .toc ul { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 .65rem; margin: 0 0 .55rem; }
+  .toc a { display: flex; align-items: center; min-height: 44px; }
+}
+
+@media (max-width: 540px) {
+  .wrap { width: calc(100% - 28px); }
+  .quick { gap: .45rem; }
+  .quick a, .switch button { font-size: .76rem; }
+  .switch button { padding-inline: .42rem; }
+  .topline { font-size: .79rem; }
+  .panel { padding-block: 1.35rem; }
+  .chart { gap: .62rem; }
+  .axis { display: block; }
+  .row, .pairline { grid-template-columns: minmax(0,1fr) max-content; gap: .16rem .6rem; }
+  .row .track, .pairline .track { grid-row: 2; grid-column: 1 / -1; height: 7px; }
+  .row .number, .pairline .number { grid-row: 1; grid-column: 2; }
+  .pairline + .pairline { margin-top: .36rem; }
+}
+
+@media print {
+  .toolbar, .toc, .section-controls { display: none; }
+  .wrap { width: 100%; }
+  .overview { display: block; }
+  .panel { break-inside: avoid; }
+  .fill { print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#results">К результатам</a>
+<header class="mast">
+  <div class="wrap">
+    <div class="topline"><time datetime="2026-11-15">13–15 ноября 2026 года</time><strong>280 анкет</strong></div>
+    <h1>Нейросети в работе учителя</h1>
+  </div>
+</header>
+<div class="toolbar">
+  <div class="wrap">
+    <nav class="quick" aria-label="Разделы страницы"><a href="#results">Результаты</a><a href="#compare">Сравнение</a></nav>
+    <div class="switch" aria-label="Единица измерения" role="group">
+      <button type="button" data-unit="count" aria-pressed="true">Число</button>
+      <button type="button" data-unit="percent" aria-pressed="false">Доля, %</button>
+    </div>
+  </div>
+</div>
+<main id="results" class="wrap" tabindex="-1">
+  <div class="overview">
+    <nav class="toc" aria-label="Блоки опроса"><details open><summary>Разделы опроса</summary><strong>Разделы опроса</strong><ul>
+      <li><a href="#profile">Кто ответил</a></li><li><a href="#frequency">Частота использования</a></li>
+      <li><a href="#services">Сервисы</a></li><li><a href="#usage">Рабочие задачи</a></li>
+      <li><a href="#workload">Трудоёмкие задачи</a></li><li><a href="#learning">Темы для обучения</a></li>
+      <li><a href="#barriers">Барьеры</a></li>
+    </ul></details></nav>
+    <div>
+      <div class="sections">
+        <section class="panel" id="profile" aria-labelledby="profile-title"><h2 id="profile-title">Кто ответил</h2><div data-chart="profile"></div><p class="meta">Из 280 анкет. Предметы сгруппированы по открытым ответам. Одна анкета может попасть в несколько групп.</p></section>
+        <section class="panel" id="frequency" aria-labelledby="frequency-title"><h2 id="frequency-title">Как часто используют ИИ</h2><p class="insight"><strong>198 из 280</strong> используют ИИ на работе примерно раз в неделю или чаще.</p><div data-chart="frequency"></div><p class="meta">Из 280 анкет. Один ответ на человека.</p></section>
+        <section class="panel" id="services" aria-labelledby="services-title"><h2 id="services-title">Какие сервисы пробовали</h2><div data-chart="services"></div><p class="meta">Из 245 учителей, которые пробовали ИИ в работе. Можно было выбрать несколько вариантов.</p></section>
+        <section class="panel" id="usage" aria-labelledby="usage-title"><h2 id="usage-title">Для чего уже применяют ИИ</h2><p class="insight">В анкетах упоминались билеты к зачёту по геометрии и рабочий лист по химии.</p><div data-chart="usage"></div><p class="meta">Из 245 учителей, которые пробовали ИИ в работе. Можно было выбрать несколько вариантов.</p></section>
+        <section class="panel" id="workload" aria-labelledby="workload-title"><h2 id="workload-title">Что отнимает время</h2><div data-chart="workload"></div><p class="meta">Из 280 анкет. До трёх вариантов на человека.</p></section>
+        <section class="panel" id="learning" aria-labelledby="learning-title"><h2 id="learning-title">Чему хотят научиться</h2><div data-chart="learning"></div><div class="callout"><strong>30 учителей</strong> хотят сначала увидеть примеры. <strong>11</strong> пока не хотят использовать ИИ в работе.</div><p class="meta">Из 280 анкет. До трёх вариантов на человека.</p></section>
+        <section class="panel" id="barriers" aria-labelledby="barriers-title"><h2 id="barriers-title">Что мешает использовать ИИ</h2><div data-chart="barriers"></div><div class="callout"><strong>103 учителя</strong> отметили «Ничего не мешает».</div><p class="meta">Из 280 анкет. Можно было выбрать несколько вариантов, включая «Ничего не мешает».</p></section>
+      </div>
+      <section class="synthesis" id="compare" aria-labelledby="compare-title">
+        <h2 id="compare-title">Сравнение ответов</h2>
+        <div class="panel">
+          <h3>На что уходит время и чему хотят научиться</h3>
+          <div id="opportunity"></div>
+          <p class="meta">Из 280 анкет. На графике показаны общие варианты двух вопросов.</p>
+          <p class="callout"><strong>59 учителей</strong> отметили, что проверка работ занимает много времени, и хотят освоить ИИ для этой задачи.</p>
+        </div>
+        <div class="panel">
+          <h3>Темы и барьеры по частоте использования ИИ</h3>
+          <div class="switch section-controls" role="group" aria-label="Показатель для сравнения">
+            <button type="button" data-metric="topics" aria-pressed="true">Темы</button>
+            <button type="button" data-metric="obstacles" aria-pressed="false">Барьеры</button>
+          </div>
+          <p class="group-bases">82 учителя используют ИИ нерегулярно или ещё не пробовали. 198 используют примерно раз в неделю или чаще.</p>
+          <div id="groups"></div>
+          <p class="meta">Доля рассчитана от числа учителей в каждой группе.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<footer><div class="wrap"><p>Из анализа исключили одну тестовую анкету. Если можно было выбрать несколько вариантов, сумма долей может превышать 100%.</p><p>Источник — опрос «Нейросети в работе учителя» в Яндекс Формах. <a href="https://forms.yandex.ru/u/6af56a14ba5f02dc732b2b72/">Открыть анкету</a></p></div></footer>
+<noscript><p class="wrap">Чтобы увидеть графики, включите JavaScript.</p></noscript>
+<script>
+"use strict";
+
+const sample = 280;
+const experienced = 245;
+const groupBases = [82, 198];
+
+const tasks = [
+  "Планирование уроков", "Объяснение сложных тем и подбор примеров",
+  "Подготовка заданий, тестов и критериев", "Адаптация материалов под уровень учеников",
+  "Проверка работ и обратная связь", "Презентации, изображения и видео",
+  "Письма, документы и отчёты", "Анализ результатов класса",
+  "Задания, в которых ученики работают с ИИ", "Другое"
+];
+const obstacles = [
+  "Не знают, с чего начать", "Сложно получить нужный результат",
+  "Приходится перепроверять или переделывать ответы", "Нет времени разбираться",
+  "Сложности с доступом или оплатой", "Неясно, какие данные можно вводить и что разрешено в школе",
+  "Пока не видят пользы для своего предмета", "Другое"
+];
+const named = (labels, counts) => labels.map((label, i) => [label, counts[i]]);
+const ranked = (rows) => [...rows].sort((a, b) => b[1] - a[1]);
+const usage = named(tasks, [95,83,183,88,30,120,90,38,31,30]);
+const workload = named(tasks, [55,63,135,87,117,88,66,48,0,13]).filter((_, i) => i !== 8);
+const learning = named(tasks, [48,80,83,64,108,78,36,51,61,10]);
+const charts = {
+  profile: {base: sample, rows: ranked([
+    ["Математика",66],["Русский язык и литература",35],["Естественные науки",34],
+    ["География",31],["Иностранные языки",30],["Информатика",28],
+    ["Начальные классы",24],["История и обществознание",23]
+  ])},
+  frequency: {base: sample, rows: [
+    ["Несколько раз в неделю или чаще",141],["Примерно раз в неделю",57],
+    ["1–3 раза за последние 30 дней",32],["Пробовали раньше, за последние 30 дней не использовали",15],
+    ["Ни разу не пробовали в работе",35]
+  ]},
+  services: {base: experienced, limit: 5, rows: ranked([
+    ["Алиса AI / YandexGPT",161],["DeepSeek",118],["ChatGPT",100],["GigaChat",89],
+    ["ИИ-функции внутри других сервисов",43],["Другой сервис",31],["Шедеврум",24],
+    ["Gamma",24],["Gemini",18],["Kandinsky",14],["Не помнят названия",7]
+  ])},
+  usage: {base: experienced, limit: 5, rows: ranked(usage)},
+  workload: {base: sample, limit: 5, rows: ranked(workload)},
+  learning: {base: sample, limit: 5, rows: ranked(learning)},
+  barriers: {base: sample, limit: 5, rows: ranked(named(obstacles,[27,33,98,78,53,28,18,11]))}
+};
+const sharedTopics = workload
+  .filter(([label]) => label !== "Другое")
+  .map(([label, count]) => [label, count, learning.find(([topic]) => topic === label)[1]])
+  .sort((a,b) => b[2]-a[2]);
+const groupData = {
+  topics: [
+    ...tasks.map((label,i) => [label,[13,21,33,17,27,27,6,8,14,1][i],[35,59,50,47,81,51,30,43,47,9][i]]),
+    ["Хотят сначала увидеть примеры",15,15],["Пока не хотят использовать ИИ",10,1]
+  ],
+  obstacles: [
+    ...obstacles.map((label,i) => [label,[20,11,30,35,17,12,16,3][i],[7,22,68,43,36,16,2,8][i]])
+  ]
+};
+let unit = "count";
+let metric = "topics";
+const percent = new Intl.NumberFormat("ru-RU",{style:"percent",maximumFractionDigits:1});
+
+function element(tag, className, value) {
+  const item = document.createElement(tag);
+  if (className) item.className = className;
+  if (value !== undefined) item.textContent = value;
+  return item;
+}
+
+function numericLabel(value) {
+  const count = Number(value.dataset.count);
+  const base = Number(value.dataset.base);
+  const share = percent.format(count / base);
+  value.firstElementChild.textContent = unit === "percent" ? share : String(count);
+  const detail = count + " из " + base + ", " + share;
+  value.title = detail;
+  value.lastElementChild.textContent = detail;
+}
+
+function bar(count, base, secondary = false) {
+  const track = element("span","track");
+  track.setAttribute("aria-hidden","true");
+  const fill = element("span","fill");
+  if (secondary) track.classList.add("plum");
+  fill.style.setProperty("--fill",count / base * 100 + "%");
+  track.append(fill);
+  const value = element("span", "number");
+  const visible = element("span");
+  visible.setAttribute("aria-hidden", "true");
+  value.append(visible, element("span", "sr-only"));
+  value.dataset.count = count;
+  value.dataset.base = base;
+  numericLabel(value);
+  return [track,value];
+}
+
+function percentAxis() {
+  const axis = element("div", "axis");
+  axis.setAttribute("aria-hidden", "true");
+  const ticks = element("span", "ticks");
+  for (const label of ["0", "25", "50", "75", "100 %"]) ticks.append(element("span", null, label));
+  axis.append(ticks);
+  return axis;
+}
+
+function simpleList(rows, base) {
+  const list = element("ul","chart");
+  for (const [label,count] of rows) {
+    const line = element("li","row");
+    line.append(element("span","label",label), ...bar(count, base));
+    list.append(line);
+  }
+  return list;
+}
+
+function renderChart(container, {rows,base,limit = rows.length}) {
+  container.append(percentAxis(), simpleList(rows.slice(0, limit), base));
+  if (limit < rows.length) {
+    const details = element("details");
+    const summary = element("summary",null,"Показать все варианты");
+    details.append(summary,simpleList(rows.slice(limit), base));
+    details.addEventListener("toggle",() => {
+      summary.textContent = details.open ? "Свернуть список" : "Показать все варианты";
+    });
+    container.append(details);
+  }
+}
+
+function renderPairs(container, rows, bases, series) {
+  const list = element("ul","pairs");
+  for (const [label,...counts] of rows) {
+    const item = element("li","pair");
+    const values = element("div");
+    counts.forEach((count,i) => {
+      const line = element("div","pairline");
+      line.append(element("span", "series-label", series[i]), ...bar(count, bases[i], i === 1));
+      values.append(line);
+    });
+    item.append(element("span","label",label),values);
+    list.append(item);
+  }
+  container.replaceChildren(percentAxis(), list);
+}
+
+function renderGroups() {
+  const rows = [...groupData[metric]].sort((a,b) => (b[1]+b[2])-(a[1]+a[2]));
+  renderPairs(document.getElementById("groups"),rows,groupBases,
+    ["Нерегулярно или ни разу", "Раз в неделю или чаще"]);
+}
+
+for (const target of document.querySelectorAll("[data-chart]")) {
+  renderChart(target,charts[target.dataset.chart]);
+}
+renderPairs(document.getElementById("opportunity"),sharedTopics,[sample,sample],
+  ["Отнимает много времени","Хотят освоить с ИИ"]);
+renderGroups();
+
+const toc = document.querySelector(".toc details");
+const narrow = window.matchMedia("(max-width: 820px)");
+toc.open = !narrow.matches;
+narrow.addEventListener("change", (event) => {
+  toc.open = !event.matches;
+});
+
+const units = document.querySelectorAll("[data-unit]");
+for (const button of units) {
+  button.addEventListener("click",() => {
+    unit = button.dataset.unit;
+    for (const item of units) item.setAttribute("aria-pressed",item === button);
+    document.querySelectorAll(".number[data-count]").forEach(numericLabel);
+  });
+}
+const metrics = document.querySelectorAll("[data-metric]");
+for (const button of metrics) {
+  button.addEventListener("click",() => {
+    metric = button.dataset.metric;
+    for (const item of metrics) item.setAttribute("aria-pressed",item === button);
+    renderGroups();
+  });
+}
+</script>
+</body>
+</html>
